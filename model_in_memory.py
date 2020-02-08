@@ -1,3 +1,13 @@
+class ArticleAlreadyExistException(Exception):
+    def __init__(self, message):
+        self.message = message
+
+
+class NonExistantArticleException(Exception):
+    def __init__(self, message):
+        self.message = message
+
+
 class Article:
     def __init__(self, title, text):
         self.title = title
@@ -9,10 +19,9 @@ class Article:
     def get_text(self):
         return self.text
 
-    def update_article_model(self, title, new_text):
-        if self.title == title:
+    def update_article(self, title, new_text):
+        if title in self.title:
             self.text = new_text
-        return self.text
 
 
 class ModelInMemory:
@@ -24,6 +33,19 @@ class ModelInMemory:
 
     def get_all_articles(self):
         return self.articles
+
+    def update_article(self, title, new_text):
+        for article in self.articles:
+            if title in article.get_title():
+                article.update_article(title, new_text)
+                return
+        raise NonExistantArticleException("Article '{}' does not exist".format(title))
+
+    def create_article(self, title, text):
+        for article in self.articles:
+            if title in article.get_title():
+                raise ArticleAlreadyExistException("Article '{}' already exists".format(article.get_title()))
+        self.articles.append(Article(title, text))
 
 
 class ModelInMemory1:

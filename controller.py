@@ -1,7 +1,3 @@
-from model_in_memory import Article
-from model_in_memory import ModelInMemory
-from model_in_memory import ModelInMemory1
-from model_in_memory import ModelInMemory2
 
 class Controller:
 
@@ -17,4 +13,9 @@ class Controller:
         return self.model.get_all_articles()
 
     def update_article(self, title, new_text):
-        
+        self.model.update_article(title, new_text)
+
+    def create_article(self, title, text):
+        result = self.model.create_article(title, text)
+        return result
+

@@ -5,6 +5,8 @@ from model_in_memory import Article
 from model_in_memory import ModelInMemory
 from model_in_memory import ModelInMemory1
 from model_in_memory import ModelInMemory2
+from model_in_memory import ArticleAlreadyExistException
+from model_in_memory import NonExistantArticleException
 
 articles = []
 
@@ -52,67 +54,64 @@ def test_should_list_two_article(model_with_two_articles):
 def test_should_update_article(model_with_two_articles):
     controller = Controller(model_with_two_articles)
     controller.update_article(title="title 1", new_text="new text 1")
+    controller.update_article(title="title 2", new_text="new text 2")
     articles = controller.get_all_articles()
     assert len(articles) == 2
     assert articles[0].get_title() == "title 1"
     assert articles[0].get_text() == "new text 1"
     assert articles[1].get_title() == "title 2"
+    assert articles[1].get_text() == "new text 2"
+
+
+def test_should_create_article(model_with_two_articles):
+    controller = Controller(model_with_two_articles)
+    controller.create_article(title="title 3", text="text 3")
+    articles = controller.get_all_articles()
+    assert len(articles) == 3
+    assert articles[0].get_title() == "title 1"
+    assert articles[0].get_text() == "text 1"
+    assert articles[1].get_title() == "title 2"
     assert articles[1].get_text() == "text 2"
 
+    assert articles[2].get_title() == "title 3"
+    assert articles[2].get_text() == "text 3"
 
-# def test_should_create_article(model_with_two_articles):
-#     controller = Controller(model_with_two_articles)
-#     controller.create_article(title="title 3", text="text 3")
-#
-#     articles = controller.get_all_articles()
-#     assert len(articles) == 3
-#     assert articles[0].get_title() == "title 1"
-#     assert articles[0].get_text() == "text 1"
-#
-#     assert articles[1].get_title() == "title 2"
-#     assert articles[1].get_text() == "text 2"
-#
-#     assert articles[2].get_title() == "title 3"
-#     assert articles[2].get_text() == "text 3"
-#
-#
-# def test_should_send_error_when_new_article_already_exist(model_with_two_articles):
-#     controller = Controller(model_with_two_articles)
-#     assert_raise_error_when_article_already_exists(controller,
-#                                                    new_title="title 2",
-#                                                    expected_error="Article 'title 2' already exists")
-#     assert_raise_error_when_article_already_exists(controller,
-#                                                    new_title="title 1",
-#                                                    expected_error="Article 'title 1' already exists")
-#
-#
-# def assert_raise_error_when_article_already_exists(controller, expected_error, new_title):
-#     try:
-#         controller.create_article(title=new_title, text="some text")
-#         pytest.fail("Exception was expected")
-#     except ArticleAlreadyExistException as e:
-#         assert e.message == expected_error
-#
-#
-# class NonExistantArticleException(Exception):
-#     def __init__(self, message):
-#         self.message = message
-#
-#
-# def test_should_raise_error_when_updating_nonexistant_article(model_with_two_articles):
-#     controller = Controller(model_with_two_articles)
-#     assert_raise_error_when_updating_nonexistant_article(controller,
-#                                                          expected_error="Article 'title unknown 1' does not exist",
-#                                                          updated_title="title unknown 1")
-#
-#     assert_raise_error_when_updating_nonexistant_article(controller,
-#                                                          expected_error="Article 'title unknown 2' does not exist",
-#                                                          updated_title="title unknown 2")
-#
-#
-# def assert_raise_error_when_updating_nonexistant_article(controller, expected_error, updated_title):
-#     try:
-#         controller.update_article(title=updated_title, new_text="some text")
-#         pytest.fail("Exception was expected")
-#     except NonExistantArticleException as e:
-#         assert e.message == expected_error
+
+def test_should_send_error_when_new_article_already_exist(model_with_two_articles):
+    controller = Controller(model_with_two_articles)
+    assert_raise_error_when_article_already_exists(controller,
+                                                   new_title="title 2",
+                                                   expected_error="Article 'title 2' already exists")
+    assert_raise_error_when_article_already_exists(controller,
+                                                   new_title="title 1",
+                                                   expected_error="Article 'title 1' already exists")
+
+
+def assert_raise_error_when_article_already_exists(controller, expected_error, new_title):
+    try:
+        controller.create_article(title=new_title, text="some text")
+        pytest.fail("Exception was expected")
+    except ArticleAlreadyExistException as e:
+        assert e.message == expected_error
+
+
+
+
+
+def test_should_raise_error_when_updating_nonexistant_article(model_with_two_articles):
+    controller = Controller(model_with_two_articles)
+    assert_raise_error_when_updating_nonexistant_article(controller,
+                                                         expected_error="Article 'title unknown 1' does not exist",
+                                                         updated_title="title unknown 1")
+
+    assert_raise_error_when_updating_nonexistant_article(controller,
+                                                         expected_error="Article 'title unknown 2' does not exist",
+                                                         updated_title="title unknown 2")
+
+
+def assert_raise_error_when_updating_nonexistant_article(controller, expected_error, updated_title):
+    try:
+        controller.update_article(title=updated_title, new_text="some text")
+        pytest.fail("Exception was expected")
+    except NonExistantArticleException as e:
+        assert e.message == expected_error
