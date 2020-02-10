@@ -14,7 +14,15 @@ class Display:
         for article in all_articles:
             print(article.title, article.text)
 
+    def update_article(self):
+        title = input("Entrez le titre de l'artique que vous souhaitez modifier: ")
+        text = input("Entrez le nouveau texte de l'article: ")
+        self.controller.update_article(title, text)
 
 
-display = Display(Controller(ModelInMemory([Article(title="title 1", text="text 1"), Article(title="title 2", text="text 2")])))
-Display.get_all_articles(display)
+
+model = Display(Controller(ModelInMemory([Article(title="title 1", text="text 1"), Article(title="title 2", text="text 2")])))
+Display.get_all_articles(model)
+Display.update_article(model)
+Display.get_all_articles(model)
+
