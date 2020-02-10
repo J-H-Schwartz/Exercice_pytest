@@ -51,7 +51,7 @@ def test_should_list_two_article(model_with_two_articles):
     assert articles[1].get_text() == "text 2"
 
 
-def test_should_update_article(model_with_two_articles):
+def test_should_update_one_article(model_with_two_articles):
     controller = Controller(model_with_two_articles)
     controller.update_article(title="title 1", new_text="new text 1")
     controller.update_article(title="title 2", new_text="new text 2")
@@ -61,6 +61,22 @@ def test_should_update_article(model_with_two_articles):
     assert articles[0].get_text() == "new text 1"
     assert articles[1].get_title() == "title 2"
     assert articles[1].get_text() == "new text 2"
+
+
+def test_bug(model_with_two_articles):
+    controller = Controller(model_with_two_articles)
+    controller.create_article(title="tle", text="text 3")
+    controller.update_article(title="tle", new_text="new text 3")
+
+    articles = controller.get_all_articles()
+    assert len(articles) == 3
+    assert articles[0].get_title() == "title 1"
+    assert articles[0].get_text() == "text 1"
+    assert articles[1].get_title() == "title 2"
+    assert articles[1].get_text() == "text 2"
+    assert articles[2].get_title() == "tle"
+    assert articles[2].get_text() == "new text 3"
+
 
 
 def test_should_create_article(model_with_two_articles):

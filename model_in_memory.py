@@ -37,17 +37,21 @@ class ModelInMemory:
 
     def update_article(self, title, new_text):
         for article in self.articles:
-            if title in article.get_title():
+            if title == article.get_title():
                 article.update_article(title, new_text)
                 return
         raise NonExistantArticleException("Article '{}' does not exist".format(title))
 
     def create_article(self, title, text):
         for article in self.articles:
-            if title in article.get_title():
+            if title == article.get_title():
                 raise ArticleAlreadyExistException("Article '{}' already exists".format(article.get_title()))
         self.articles.append(Article(title, text))
 
+    def delete_article(self, title):
+        for article in self.articles:
+            if title == article.get_title():
+                self.articles.remove(article)
 
 class ModelInMemory1:
     def __str__(self):

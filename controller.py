@@ -19,3 +19,5 @@ class Controller:
         result = self.model.create_article(title, text)
         return result
 
+    def delete_article(self, title):
+        self.model.delete_article(title)
