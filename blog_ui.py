@@ -1,23 +1,25 @@
+from controller import Controller
+
 
 class Display:
 
     def __init__(self, controller):
         self.controller = controller
 
-    def start(self, display):
-        display.display_all_articles()
+    def start(self):
+        self.display_all_articles()
         while True:
             choice = input(
                 "Que souhaitez vous faire ? (L)ister  /  (C)réer article  /  (M)ise à jour article  /  (S)upprimer / "
                 "(Q)uitter :").upper()
             if choice == "L":
-                display.display_all_articles()
+                self.display_all_articles()
             elif choice == "C":
-                display.create_article()
+                self.create_article()
             elif choice == "M":
-                display.update_article()
+                self.update_article()
             elif choice == "S":
-                display.delete_article()
+                self.delete_article()
             elif choice == "Q":
                 break
             else:
@@ -26,21 +28,30 @@ class Display:
     def display_all_articles(self):
         all_articles = self.controller.get_all_articles()
         for article in all_articles:
-            print(article.title, article.text)
+            print(article)
 
     def update_article(self):
         title = input("Entrez le titre de l'article que vous souhaitez modifier: ")
         text = input("Entrez le nouveau texte de l'article: ")
-        self.controller.update_article(title, text)
-        print("Article mis à jour avec succès.")
+        update = self.controller.update_article(title, text)
+        if update:
+            print("Article mis à jour avec succès.")
+        else:
+            print("L'article n'existe pas.")
 
     def create_article(self):
         title = input("Entrez le titre du nouvel article: ")
         text = input("Entre le texte du nouvel article: ")
-        self.controller.create_article(title, text)
-        print("Article créé avec succès.")
+        creation = self.controller.create_article(title, text)
+        if creation:
+            print("Article créé avec succès.")
+        else:
+            print("L'article existe déja.")
 
     def delete_article(self):
         title = input("Entrez le titre de l'article à supprimer: ")
-        self.controller.delete_article(title)
-        print("Article supprimé avec succès.")
+        deletion = self.controller.delete_article(title)
+        if deletion :
+            print("Article supprimé avec succès.")
+        else:
+            print("L'article n'existe pas.")
