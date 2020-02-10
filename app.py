@@ -1,9 +1,9 @@
 from blog_ui import Display
-from model_database import ModelInMemory
+from model_database import ModelDatabase
 from controller import Controller
 
 def main():
-    display = Display(Controller(ModelInMemory()))
+    display = Display(Controller(ModelDatabase()))
     display.start()
 
 

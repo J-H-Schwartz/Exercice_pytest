@@ -19,7 +19,7 @@ class Articles(Model):
         return self.select(Articles.text)
 
 
-class ModelInMemory:
+class ModelDatabase:
     def __init__(self):
         self.articles = Articles
 
