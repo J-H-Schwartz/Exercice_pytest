@@ -1,8 +1,3 @@
-from controller import Controller
-from model_in_memory import Article
-from model_in_memory import ModelInMemory
-
-
 
 class Display:
 
@@ -18,11 +13,10 @@ class Display:
         title = input("Entrez le titre de l'artique que vous souhaitez modifier: ")
         text = input("Entrez le nouveau texte de l'article: ")
         self.controller.update_article(title, text)
+        print("Article mis à jour avec succès.")
 
-
-
-model = Display(Controller(ModelInMemory([Article(title="title 1", text="text 1"), Article(title="title 2", text="text 2")])))
-Display.get_all_articles(model)
-Display.update_article(model)
-Display.get_all_articles(model)
-
+    def create_article(self):
+        title = input("Entrez le titre du nouvel article: ")
+        text = input("Entre le texte du nouvel article:")
+        self.controller.create_article(title, text)
+        print("Article créé avec succès.")
